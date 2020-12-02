@@ -1,9 +1,9 @@
 package smchik.t.me.githubsearch
 
 import android.os.Bundle
+import android.view.inputmethod.EditorInfo
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -23,10 +23,14 @@ class MainActivity : AppCompatActivity() {
             adapter.setItems(list)
         }
 
+        searchEditText.setOnEditorActionListener { view, actionId, _ ->
 
-        searchEditText.doAfterTextChanged {
-            val text = it?.toString() ?: ""
-            viewModel.searchRepositories(text)
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                viewModel.searchRepositories(view.text.toString())
+                return@setOnEditorActionListener true
+            }
+
+            return@setOnEditorActionListener false
         }
     }
 }
